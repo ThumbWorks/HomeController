@@ -10,9 +10,9 @@ import Foundation
 import HomeKit
 
 public class Home {
-    public var thermostat: Thermostat?
-    public var lock: DoorLock?
-    public var light: Light?
+    public var thermostats = [Thermostat]()
+    public var locks = [DoorLock]()
+    public var lights = [Light]()
 }
 
 enum LockState {

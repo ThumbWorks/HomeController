@@ -11,9 +11,9 @@ import HomeKit
 extension HomeController: HMAccessoryDelegate {
     public func accessory(_ accessory: HMAccessory, service: HMService, didUpdateValueFor characteristic: HMCharacteristic) {
         print("an accessory updated")
-        let lock = home?.lock
-        let light = home?.light
-        let thermostat = home?.thermostat
+        let lock = home.locks.first
+        let light = home.lights.first
+        let thermostat = home.thermostats.first
         if characteristic == lock?.setLockCharacteristic {
             print("the door lock changed")
             guard let closure = lockUpdate else {
@@ -46,7 +46,7 @@ extension HomeController: HMAccessoryDelegate {
 }
 
 public class HomeController: NSObject {
-    public var home: Home?
+    public var home = Home()
     
     let homeManager = HMHomeManager()
     let homeManagerDelegate = HomeManagerDelegate()
@@ -64,9 +64,13 @@ public class HomeController: NSObject {
         if homeManager.homes.count == 0 {
             print("there are no homes")
             homeManager.addHome(withName: "arbutus", completionHandler: { (home, error) in
-                print("the home is \(String(describing: home?.name)) error is \(String(describing: error))")
+                guard let home = home else {
+                    print("Error adding a home")
+                    return
+                }
+                print("the home is \(home.name) error is \(String(describing: error))")
                 if error == nil {
-                    home?.addRoom(withName: "Main Room", completionHandler: { (room, error) in
+                    home.addRoom(withName: "Main Room", completionHandler: { (room, error) in
                         if let error = error {
                             print("Error creating room \(error)")
                         }
@@ -76,7 +80,6 @@ public class HomeController: NSObject {
         } else {
             print(" found some homes \(homeManager.homes)")
             if let homeObject = homeManager.primaryHome {
-                home = Home()
                 print("the accessories are \(homeObject.accessories)")
                 for accessory in homeObject.accessories {
                     print(" services for \(accessory.name) \(accessory.category.categoryType). Is it the same as \(HMServiceTypeThermostat)")
@@ -86,9 +89,9 @@ public class HomeController: NSObject {
                     }
                     
                     for service in accessory.services {
-                        print("  service \(service.name) \(service.serviceType) \(service.uniqueIdentifier)")
+                        print("  service name: \(service.name) type: \(service.serviceType) uniqueID: \(service.uniqueIdentifier)")
                         if service.serviceType == HMServiceTypeThermostat {
-                            print("Hey this is a thermostat service")                            
+                            print("Hey this is a thermostat service \(HMServiceTypeThermostat)")
                         }
                     }
                     print("\n\n")
@@ -96,16 +99,20 @@ public class HomeController: NSObject {
                         // blindly set all accessory delegates to self, we can filter when we get the notifications
                         accessory.delegate = self
                         
+                        if service.serviceType == HMServiceTypeThermostat {
+                            print("Hey this is a thermostat service \(HMServiceTypeThermostat)")
+                        }
+                        
                         print("  this service \(service.name) has characteristics")
                         for characteristic in service.characteristics {
                             print("   characteristic \(characteristic.localizedDescription)")//\(characteristic.properties) ")
                             
                             if service.name == "Patio Light" && characteristic.localizedDescription == "Power State" {
-                                home?.light =  Light(lightCharacteristic: characteristic)
+                                home.lights.append(Light(lightCharacteristic: characteristic))
                             }
                             if characteristic.localizedDescription == "Current Temperature" {
                                 print("      Current temperature type is \(characteristic.characteristicType)")
-                                home?.thermostat = Thermostat(thermostat: accessory, currentTemp: characteristic)
+                                home.thermostats.append(Thermostat(thermostat: accessory, currentTemp: characteristic))
                             }
                             if characteristic.localizedDescription == "Lock Mechanism Current State" {
                                 print("      Current lock state mechanism type is \(characteristic.characteristicType)")
@@ -123,8 +130,9 @@ public class HomeController: NSObject {
                                     return
                                 }
                                 print("      Lock mechanism type is \(lockChar.characteristicType)")
-                                home?.lock = DoorLock(lock: accessory, readLockedCharacteristic: characteristic, setLockedCharacteristic: lockChar)
-                                home?.lock?.enableNotifications()
+                                let newLock = DoorLock(lock: accessory, readLockedCharacteristic: characteristic, setLockedCharacteristic: lockChar)
+                                home.locks.append(newLock)
+                                newLock.enableNotifications()
                             }
                         }
                     }
@@ -136,20 +144,20 @@ public class HomeController: NSObject {
 
 extension HomeController {
     func toggleLight(completion: @escaping (LightState) -> ()) {
-        home?.light?.isOn(lightCheckHandler: { (lightState) in
+        home.lights.first?.isOn(lightCheckHandler: { (lightState) in
             switch lightState {
             case .On:
-                self.turnOffLight()
+                self.turnOffFirstLight()
             case .Off:
-                self.turnOnLight()
+                self.turnOnFirstLight()
             case .Unknown:
                 print("unknown light state")
             }
             completion(lightState)
         })
     }
-    func turnOnLight() {
-        home?.light?.turnOnLight(lightHandler: { (success) in
+    func turnOnFirstLight() {
+        home.lights.first?.turnOnLight(lightHandler: { (success) in
             if let lightUpdate = self.lightUpdate {
                 lightUpdate(.On)
             } else {
@@ -158,8 +166,8 @@ extension HomeController {
         })
     }
     
-    func turnOffLight() {
-        home?.light?.turnOffLight(lightHandler: { (success) in
+    func turnOffFirstLight() {
+        home.lights.first?.turnOffLight(lightHandler: { (success) in
             if let lightUpdate = self.lightUpdate {
                 // If this fails, send back a YES because we want to keep the lights on
                 lightUpdate(.Off)
@@ -169,12 +177,12 @@ extension HomeController {
         })
     }
     
-    func lockDoor() {
-        home?.lock?.lockDoor()
+    func lockFirstDoor() {
+        home.locks.first?.lockDoor()
     }
     
-    func unlockDoor() {
-        home?.lock?.unlockDoor()
+    func unlockFirstDoor() {
+        home.locks.first?.unlockDoor()
     }
 }
 
