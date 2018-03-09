@@ -1,0 +1,11 @@
+framework module HomeController {
+  umbrella header "HomeController.h"
+
+  export *
+  module * { export * }
+}
+
+module HomeController.Swift {
+    header "HomeController-Swift.h"
+    requires objc
+}
