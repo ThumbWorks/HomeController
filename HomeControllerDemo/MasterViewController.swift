@@ -13,12 +13,16 @@ class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
     var objects = [Any]()
-    let homeController = HomeController()
-    
+    let homeController: HomeController = {
+        let home = HomeController()
+        return home
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        homeController.finishedInitializing = {
+            self.tableView.reloadData()
+        }
         // Do any additional setup after loading the view, typically from a nib.
         navigationItem.leftBarButtonItem = editButtonItem
 
@@ -30,11 +34,11 @@ class MasterViewController: UITableViewController {
         }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        homeController.homekitSetup()
-        print("home \(homeController.home.lights.count)")
-        tableView.reloadData()
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+////        homeController.homekitSetup()
+////        print("home \(homeController.home.lights.count)")
+//        tableView.reloadData()
+//    }
     
     @objc
     func insertNewObject(_ sender: Any) {
@@ -122,7 +126,7 @@ class MasterViewController: UITableViewController {
         case 2:
             return "Locks"
         case 3:
-            return "Locks"
+            return "Toggles"
         default:
             return "unknown"
         }

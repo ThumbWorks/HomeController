@@ -48,6 +48,8 @@ extension HomeController: HMAccessoryDelegate {
 public class HomeController: NSObject {
     public var home = Home()
     
+    public var finishedInitializing: (() ->())?
+    
     let homeManager = HMHomeManager()
     let homeManagerDelegate = HomeManagerDelegate()
     
@@ -56,10 +58,19 @@ public class HomeController: NSObject {
     var lockUpdate: ((LockState) -> Void)?
     var lightUpdate: ((LightState) -> Void)?
     
+    override public init() {
+        homeManager.delegate = homeManagerDelegate
+        super.init()
+        homeManagerDelegate.doneUpdatingHomes = {
+            print("done updating homes")
+            self.homekitSetup()
+            self.finishedInitializing?()
+        }
+    }
+    
     // Setup goes through all available devices to determine services and characteristics then stores references
     // in this HomeController instance
     public func homekitSetup() {
-        homeManager.delegate = homeManagerDelegate
         
         guard homeManager.homes.count > 0 else {
             print("there are no homes")

@@ -10,8 +10,11 @@ import Foundation
 import HomeKit
 
 class HomeManagerDelegate: NSObject, HMHomeManagerDelegate {
+    var doneUpdatingHomes: (() -> ())?
+    
     func homeManagerDidUpdateHomes(_ manager: HMHomeManager) {
         print("updated homes")
+        doneUpdatingHomes?()
     }
     func homeManagerDidUpdatePrimaryHome(_ manager: HMHomeManager) {
         print("updated primary")
