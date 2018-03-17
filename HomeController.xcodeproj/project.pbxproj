@@ -13,6 +13,15 @@
 		5F8D853E2052533F00DCB05B /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D853D2052533F00DCB05B /* HomeController.swift */; };
 		5F8D85402052536C00DCB05B /* HomeObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D853F2052536C00DCB05B /* HomeObjects.swift */; };
 		5F8D85442052563F00DCB05B /* HomeManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85432052563F00DCB05B /* HomeManagerDelegate.swift */; };
+		5FC5BEB1205B79470088E15D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC5BEB0205B79470088E15D /* AppDelegate.swift */; };
+		5FC5BEB3205B79470088E15D /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC5BEB2205B79470088E15D /* MasterViewController.swift */; };
+		5FC5BEB5205B79470088E15D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC5BEB4205B79470088E15D /* DetailViewController.swift */; };
+		5FC5BEB8205B79470088E15D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FC5BEB6205B79470088E15D /* Main.storyboard */; };
+		5FC5BEBA205B79470088E15D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5FC5BEB9205B79470088E15D /* Assets.xcassets */; };
+		5FC5BEBD205B79470088E15D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FC5BEBB205B79470088E15D /* LaunchScreen.storyboard */; };
+		5FC5BECD205B7DED0088E15D /* HomeController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8D85232052530B00DCB05B /* HomeController.framework */; };
+		5FC5BECE205B7DED0088E15D /* HomeController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8D85232052530B00DCB05B /* HomeController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5FC5BED4205B7FDB0088E15D /* HomeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FC5BED3205B7FDB0088E15D /* HomeKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,7 +32,28 @@
 			remoteGlobalIDString = 5F8D85222052530B00DCB05B;
 			remoteInfo = HomeController;
 		};
+		5FC5BECF205B7DEE0088E15D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5F8D851A2052530B00DCB05B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5F8D85222052530B00DCB05B;
+			remoteInfo = HomeController;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5FC5BED1205B7DEE0088E15D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5FC5BECE205B7DED0088E15D /* HomeController.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5F8D85232052530B00DCB05B /* HomeController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HomeController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -35,6 +65,17 @@
 		5F8D853D2052533F00DCB05B /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		5F8D853F2052536C00DCB05B /* HomeObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeObjects.swift; sourceTree = "<group>"; };
 		5F8D85432052563F00DCB05B /* HomeManagerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeManagerDelegate.swift; sourceTree = "<group>"; };
+		5FC5BEAE205B79470088E15D /* HomeControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FC5BEB0205B79470088E15D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		5FC5BEB2205B79470088E15D /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		5FC5BEB4205B79470088E15D /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		5FC5BEB7205B79470088E15D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5FC5BEB9205B79470088E15D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5FC5BEBC205B79470088E15D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5FC5BEBE205B79470088E15D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5FC5BEC2205B7C980088E15D /* HomeControllerDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HomeControllerDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		5FC5BED2205B7FDB0088E15D /* HomeControllerDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HomeControllerDemo.entitlements; sourceTree = "<group>"; };
+		5FC5BED3205B7FDB0088E15D /* HomeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HomeKit.framework; path = System/Library/Frameworks/HomeKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +94,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5FC5BEAB205B79470088E15D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FC5BED4205B7FDB0088E15D /* HomeKit.framework in Frameworks */,
+				5FC5BECD205B7DED0088E15D /* HomeController.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -61,7 +111,10 @@
 			children = (
 				5F8D85252052530B00DCB05B /* HomeController */,
 				5F8D85302052530B00DCB05B /* HomeControllerTests */,
+				5FC5BEAF205B79470088E15D /* HomeControllerDemo */,
 				5F8D85242052530B00DCB05B /* Products */,
+				5FC5BEC2205B7C980088E15D /* HomeControllerDemo-Bridging-Header.h */,
+				5FC5BEC6205B7CD40088E15D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,6 +123,7 @@
 			children = (
 				5F8D85232052530B00DCB05B /* HomeController.framework */,
 				5F8D852C2052530B00DCB05B /* HomeControllerTests.xctest */,
+				5FC5BEAE205B79470088E15D /* HomeControllerDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,6 +147,29 @@
 				5F8D85332052530C00DCB05B /* Info.plist */,
 			);
 			path = HomeControllerTests;
+			sourceTree = "<group>";
+		};
+		5FC5BEAF205B79470088E15D /* HomeControllerDemo */ = {
+			isa = PBXGroup;
+			children = (
+				5FC5BED2205B7FDB0088E15D /* HomeControllerDemo.entitlements */,
+				5FC5BEB0205B79470088E15D /* AppDelegate.swift */,
+				5FC5BEB2205B79470088E15D /* MasterViewController.swift */,
+				5FC5BEB4205B79470088E15D /* DetailViewController.swift */,
+				5FC5BEB6205B79470088E15D /* Main.storyboard */,
+				5FC5BEB9205B79470088E15D /* Assets.xcassets */,
+				5FC5BEBB205B79470088E15D /* LaunchScreen.storyboard */,
+				5FC5BEBE205B79470088E15D /* Info.plist */,
+			);
+			path = HomeControllerDemo;
+			sourceTree = "<group>";
+		};
+		5FC5BEC6205B7CD40088E15D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5FC5BED3205B7FDB0088E15D /* HomeKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -145,6 +222,25 @@
 			productReference = 5F8D852C2052530B00DCB05B /* HomeControllerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		5FC5BEAD205B79470088E15D /* HomeControllerDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5FC5BEC1205B79470088E15D /* Build configuration list for PBXNativeTarget "HomeControllerDemo" */;
+			buildPhases = (
+				5FC5BEAA205B79470088E15D /* Sources */,
+				5FC5BEAB205B79470088E15D /* Frameworks */,
+				5FC5BEAC205B79470088E15D /* Resources */,
+				5FC5BED1205B7DEE0088E15D /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5FC5BED0205B7DEE0088E15D /* PBXTargetDependency */,
+			);
+			name = HomeControllerDemo;
+			productName = HomeControllerDemo;
+			productReference = 5FC5BEAE205B79470088E15D /* HomeControllerDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -164,6 +260,16 @@
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
+					5FC5BEAD205B79470088E15D = {
+						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0920;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.HomeKit = {
+								enabled = 1;
+							};
+						};
+					};
 				};
 			};
 			buildConfigurationList = 5F8D851D2052530B00DCB05B /* Build configuration list for PBXProject "HomeController" */;
@@ -172,6 +278,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 5F8D85192052530B00DCB05B;
 			productRefGroup = 5F8D85242052530B00DCB05B /* Products */;
@@ -180,6 +287,7 @@
 			targets = (
 				5F8D85222052530B00DCB05B /* HomeController */,
 				5F8D852B2052530B00DCB05B /* HomeControllerTests */,
+				5FC5BEAD205B79470088E15D /* HomeControllerDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -196,6 +304,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5FC5BEAC205B79470088E15D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FC5BEBD205B79470088E15D /* LaunchScreen.storyboard in Resources */,
+				5FC5BEBA205B79470088E15D /* Assets.xcassets in Resources */,
+				5FC5BEB8205B79470088E15D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,6 +338,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5FC5BEAA205B79470088E15D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FC5BEB5205B79470088E15D /* DetailViewController.swift in Sources */,
+				5FC5BEB3205B79470088E15D /* MasterViewController.swift in Sources */,
+				5FC5BEB1205B79470088E15D /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -228,7 +356,31 @@
 			target = 5F8D85222052530B00DCB05B /* HomeController */;
 			targetProxy = 5F8D852E2052530B00DCB05B /* PBXContainerItemProxy */;
 		};
+		5FC5BED0205B7DEE0088E15D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5F8D85222052530B00DCB05B /* HomeController */;
+			targetProxy = 5FC5BECF205B7DEE0088E15D /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		5FC5BEB6205B79470088E15D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5FC5BEB7205B79470088E15D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5FC5BEBB205B79470088E15D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5FC5BEBC205B79470088E15D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		5F8D85352052530C00DCB05B /* Debug */ = {
@@ -419,6 +571,45 @@
 			};
 			name = Release;
 		};
+		5FC5BEBF205B79470088E15D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HomeControllerDemo/HomeControllerDemo.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = F4WTN36U2F;
+				INFOPLIST_FILE = HomeControllerDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.thumbworks.HomeControllerDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "HomeControllerDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5FC5BEC0205B79470088E15D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HomeControllerDemo/HomeControllerDemo.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = F4WTN36U2F;
+				INFOPLIST_FILE = HomeControllerDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.thumbworks.HomeControllerDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "HomeControllerDemo-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -445,6 +636,15 @@
 			buildConfigurations = (
 				5F8D853B2052530C00DCB05B /* Debug */,
 				5F8D853C2052530C00DCB05B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5FC5BEC1205B79470088E15D /* Build configuration list for PBXNativeTarget "HomeControllerDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5FC5BEBF205B79470088E15D /* Debug */,
+				5FC5BEC0205B79470088E15D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

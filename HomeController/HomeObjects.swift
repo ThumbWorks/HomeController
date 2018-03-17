@@ -13,6 +13,7 @@ public class Home {
     public var thermostats = [Thermostat]()
     public var locks = [DoorLock]()
     public var lights = [Light]()
+    public var toggles = [Toggle]()
 }
 
 enum LockState {
@@ -28,16 +29,14 @@ enum LightState {
     case Unknown
 }
 
-public class DoorLock: NSObject {
+public class DoorLock: Accessory {
     
-    let accessory: HMAccessory
     let readLockCharacteristic: HMCharacteristic
     let setLockCharacteristic: HMCharacteristic
     init(lock: HMAccessory, readLockedCharacteristic: HMCharacteristic, setLockedCharacteristic: HMCharacteristic) {
-        accessory = lock
         readLockCharacteristic = readLockedCharacteristic
         setLockCharacteristic = setLockedCharacteristic
-        
+        super.init(accessory: lock)
     }
     
     func enableNotifications() {
@@ -108,41 +107,123 @@ public class DoorLock: NSObject {
     }
 }
 
-public class Thermostat: NSObject {
+public class Accessory: NSObject {
     let accessory: HMAccessory
-    let currentTempCharacteristic: HMCharacteristic
-    init(thermostat: HMAccessory, currentTemp: HMCharacteristic) {
-        accessory = thermostat
-        currentTempCharacteristic = currentTemp
+
+    init(accessory: HMAccessory) {
+        self.accessory = accessory
     }
     
+    public func name() -> String {
+        return accessory.name
+    }
+}
+
+public enum ThermostatMode: Int {
+    case off
+    case heat
+    case cool
+    case fan
+}
+
+public class Toggle: Accessory {
+    init(toggle: HMAccessory) {
+        super.init(accessory: toggle)
+    }
+}
+
+extension HMAccessory {
+    func characteristic(with string: String) -> HMCharacteristic? {
+        return services.filter { (service) -> Bool in
+            service.characteristics.filter({ (characteristic) -> Bool in
+                return characteristic.localizedDescription == string
+            }).count > 0
+            }.first?.characteristics.filter({ (characteristic) -> Bool in
+                return characteristic.localizedDescription == string
+            }).first
+    }
+}
+public class Thermostat: Accessory {
+    lazy var currentTempCharacteristic: HMCharacteristic? = {
+        return accessory.characteristic(with: "Current Temperature")
+    }()
+    
+    lazy var currentModeCharacteristic: HMCharacteristic? = {
+        return accessory.characteristic(with: "Target Heating Cooling State")
+    }()
+    
+    
+    init(thermostat: HMAccessory) {
+        super.init(accessory: thermostat)
+    }
+    
+    public func setMode(to mode: ThermostatMode) {
+        guard let characteristic = currentModeCharacteristic else {
+            print("Can not set the mode for an object without the supported characteristic")
+            return
+        }
+        characteristic.writeValue(mode.rawValue) { (error) in
+            if let error = error {
+                print("This didn't work \(error)")
+            } else {
+                print("Looks like setting the mode worked")
+            }
+            
+        }
+        print("the mode setting characteristics should be 1 or 0 \(characteristic)")
+    }
+    
+    public func canSetThermostatMode() -> Bool {
+        return accessory.services.filter { (service) -> Bool in
+            service.characteristics.filter({ (characteristic) -> Bool in
+                return characteristic.localizedDescription == "Target Heating Cooling State"
+            }).count > 0
+            }.count > 0
+    }
+    
+    public func canSetTargetTemperature() -> Bool {
+        return accessory.services.filter { (service) -> Bool in
+            service.characteristics.filter({ (characteristic) -> Bool in
+                return characteristic.localizedDescription == "Target Temperature"
+            }).count > 0
+            }.count > 0
+    }
+
     func enableNotifications() {
-        if !currentTempCharacteristic.isNotificationEnabled {
+        print("THERMOSTAT attempt to enable notificaitons on this")
+        guard let characteristic = currentTempCharacteristic else {
+            print("we can't do notifications if there is no mode characteristic")
+            return
+        }
+        if !characteristic.isNotificationEnabled {
             // Set up notifications for changes in current temperature
-            currentTempCharacteristic.enableNotification(true) { (error) in
+            characteristic.enableNotification(true) { (error) in
                 if let error = error {
-                    print("FAIL: There was an error with enabling notifications for temperature changes \(error.localizedDescription)")
+                    print("FAIL: THERMOSTAT There was an error with enabling notifications for temperature changes \(error.localizedDescription)")
                 } else {
-                    print("SUCCESS: current temperature notification set up properly")
+                    print("SUCCESS: THERMOSTAT current temperature notification set up properly")
                 }
             }
+        } else {
+            print("THERMOSTAT notifications not enabled on this characteristic")
         }
     }
     
     public func temperature() -> NSNumber {
-        if let temperature =  self.currentTempCharacteristic.value as? NSNumber {
+        if let temperature =  self.currentTempCharacteristic?.value as? NSNumber {
             return temperature
         }
         return 0
     }
     
     func currentTemperature(fetchedTemperatureHandler: @escaping (Float) -> ()) {
-        currentTempCharacteristic.readValue(completionHandler: { (error) in
+        currentTempCharacteristic?.readValue(completionHandler: { (error) in
             if let error = error {
-                print("There was an error reading the temperature value \(error.localizedDescription)")
+                print("THERMOSTAT There was an error reading the temperature value \(error.localizedDescription)")
             } else {
-                print("successfully read the temperature value \(String(describing: self.currentTempCharacteristic.value))")
-                if let temperature =  self.currentTempCharacteristic.value as? NSNumber {
+                print("THERMOSTAT successfully read the temperature value \(String(describing: self.currentTempCharacteristic?.value))")
+                if let temperature =  self.currentTempCharacteristic?.value as? NSNumber {
+                    print("THERMOSTAT fetrched temperature handler")
                     fetchedTemperatureHandler(temperature.celsiusToFarenheit())
                 }
             }

@@ -61,85 +61,82 @@ public class HomeController: NSObject {
     public func homekitSetup() {
         homeManager.delegate = homeManagerDelegate
         
-        if homeManager.homes.count == 0 {
+        guard homeManager.homes.count > 0 else {
             print("there are no homes")
-            homeManager.addHome(withName: "arbutus", completionHandler: { (home, error) in
-                guard let home = home else {
-                    print("Error adding a home")
-                    return
+            return
+        }
+        print(" found some homes \(homeManager.homes)")
+        guard let homeObject = homeManager.primaryHome else {
+            print("there is no primary home")
+            return
+        }
+        
+        print("the accessories are \(homeObject.accessories)")
+        for accessory in homeObject.accessories {
+            print("\nIterate through services for accessory: \(accessory.name) \(accessory.category.categoryType). Model: \(accessory.model) manufacturer \(accessory.manufacturer)")
+            for service in accessory.services {
+                // blindly set all accessory delegates to self, we can filter when we get the notifications
+                accessory.delegate = self
+                
+                print("   service name: \(service.name) type: \(service.serviceType) uniqueID: \(service.uniqueIdentifier)")
+                
+                if service.serviceType == HMServiceTypeSwitch {
+                    print("🎚 Hey we found a switch ")
+                    home.toggles.append(Toggle(toggle: accessory))
                 }
-                print("the home is \(home.name) error is \(String(describing: error))")
-                if error == nil {
-                    home.addRoom(withName: "Main Room", completionHandler: { (room, error) in
-                        if let error = error {
-                            print("Error creating room \(error)")
-                        }
-                    })
+                if service.serviceType == HMServiceTypeLightbulb {
+                    print("💡 Hey we found a light ")
+
                 }
-            })
-        } else {
-            print(" found some homes \(homeManager.homes)")
-            if let homeObject = homeManager.primaryHome {
-                print("the accessories are \(homeObject.accessories)")
-                for accessory in homeObject.accessories {
-                    print(" services for \(accessory.name) \(accessory.category.categoryType). Is it the same as \(HMServiceTypeThermostat)")
-                    
-                    if accessory.category.categoryType == HMServiceTypeThermostat {
-                        print("Hey this is a thermostat accessory")
+                if service.serviceType == HMServiceTypeThermostat {
+                    print("\n\n   🔥🔥Hey this is a thermostat since it provides this service: (\(HMServiceTypeThermostat)")
+                }
+                
+                print("\n  this service <<<\(service.name)>>> has characteristics")
+                for characteristic in service.characteristics {
+                    if characteristic.localizedDescription == "Target Temperature" {
+                        print("This can set the temp. characteristic is \(characteristic)")
                     }
+                    print("      characteristic \(characteristic.localizedDescription)")//\(characteristic.properties) ")
                     
-                    for service in accessory.services {
-                        print("  service name: \(service.name) type: \(service.serviceType) uniqueID: \(service.uniqueIdentifier)")
-                        if service.serviceType == HMServiceTypeThermostat {
-                            print("Hey this is a thermostat service \(HMServiceTypeThermostat)")
-                        }
+                    if service.name == "Patio Light" && characteristic.localizedDescription == "Power State" {
+                        home.lights.append(Light(lightCharacteristic: characteristic))
                     }
-                    print("\n\n")
-                    for service in accessory.services {
-                        // blindly set all accessory delegates to self, we can filter when we get the notifications
-                        accessory.delegate = self
+                    if characteristic.localizedDescription == "Current Temperature" {
+                        print("       ✅Thermostat Current temperature type is \(characteristic.characteristicType)")
+                        let thermostat = Thermostat(thermostat: accessory)
+                        thermostat.currentTemperature(fetchedTemperatureHandler: { (temp) in
+                            print("       ✅Thermostat says the temperature is \(temp)")
+                        })
+                        print("       ✅append thermostat")
+                        home.thermostats.append(thermostat)
+                    }
+                    if characteristic.localizedDescription == "Lock Mechanism Current State" {
+                        print("      Current lock state mechanism type is \(characteristic.characteristicType)")
                         
-                        if service.serviceType == HMServiceTypeThermostat {
-                            print("Hey this is a thermostat service \(HMServiceTypeThermostat)")
-                        }
+                        // We now know that this is a lock, it has a characteristicType for modifying, let's find it
+                        let lockCharArray = service.characteristics.filter({ (filterCharactersitic) -> Bool in
+                            if (filterCharactersitic.localizedDescription == "Lock Mechanism Target State") {
+                                return true
+                            }
+                            return false
+                        })
                         
-                        print("  this service \(service.name) has characteristics")
-                        for characteristic in service.characteristics {
-                            print("   characteristic \(characteristic.localizedDescription)")//\(characteristic.properties) ")
-                            
-                            if service.name == "Patio Light" && characteristic.localizedDescription == "Power State" {
-                                home.lights.append(Light(lightCharacteristic: characteristic))
-                            }
-                            if characteristic.localizedDescription == "Current Temperature" {
-                                print("      Current temperature type is \(characteristic.characteristicType)")
-                                home.thermostats.append(Thermostat(thermostat: accessory, currentTemp: characteristic))
-                            }
-                            if characteristic.localizedDescription == "Lock Mechanism Current State" {
-                                print("      Current lock state mechanism type is \(characteristic.characteristicType)")
-                                
-                                // We now know that this is a lock, it has a characteristicType for modifying, let's find it
-                                let lockCharArray = service.characteristics.filter({ (filterCharactersitic) -> Bool in
-                                    if (filterCharactersitic.localizedDescription == "Lock Mechanism Target State") {
-                                        return true
-                                    }
-                                    return false
-                                })
-                                
-                                guard let lockChar = lockCharArray.first else {
-                                    print("We did not get a set lock characteristic")
-                                    return
-                                }
-                                print("      Lock mechanism type is \(lockChar.characteristicType)")
-                                let newLock = DoorLock(lock: accessory, readLockedCharacteristic: characteristic, setLockedCharacteristic: lockChar)
-                                home.locks.append(newLock)
-                                newLock.enableNotifications()
-                            }
+                        guard let lockChar = lockCharArray.first else {
+                            print("We did not get a set lock characteristic")
+                            return
                         }
+                        print("      Lock mechanism type is \(lockChar.characteristicType)")
+                        let newLock = DoorLock(lock: accessory, readLockedCharacteristic: characteristic, setLockedCharacteristic: lockChar)
+                        home.locks.append(newLock)
+                        newLock.enableNotifications()
                     }
                 }
             }
         }
+        
     }
+    
 }
 
 extension HomeController {
