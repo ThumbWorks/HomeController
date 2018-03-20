@@ -168,8 +168,10 @@ extension MasterViewController: UITableViewDataSource {
                     print(light, " turn it \(sender.isOn)")
                     
                     let state: ToggleState = sender.isOn ? .on : .off
-                    light.update(lightState: state, completion: { (isOn) in
-                        sender.isOn = isOn
+                    light.update(lightState: state, completion: { (success) in
+                        if !success {
+                            sender.isOn = !sender.isOn
+                        }
                     })
                     
                 case 2:

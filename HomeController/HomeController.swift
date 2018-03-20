@@ -92,15 +92,10 @@ public class HomeController: NSObject {
                 print("   service name: \(service.name) type: \(service.serviceType) uniqueID: \(service.uniqueIdentifier)")
                 
                 if service.serviceType == HMServiceTypeSwitch {
-                    print("🎚 Hey we found a switch ")
                     home.toggles.append(Toggle(toggle: accessory))
                 }
                 if service.serviceType == HMServiceTypeLightbulb {
-                    print("💡 Hey we found a light ")
-
-                }
-                if service.serviceType == HMServiceTypeThermostat {
-                    print("\n\n   🔥🔥Hey this is a thermostat since it provides this service: (\(HMServiceTypeThermostat)")
+                    home.lights.append(Light(light: accessory))
                 }
                 
                 print("\n  this service <<<\(service.name)>>> has characteristics")
@@ -110,9 +105,7 @@ public class HomeController: NSObject {
                     }
                     print("      characteristic \(characteristic.localizedDescription)")//\(characteristic.properties) ")
                     
-                    if service.name == "Patio Light" && characteristic.localizedDescription == "Power State" {
-                        home.lights.append(Light(light: accessory))
-                    }
+
                     if characteristic.localizedDescription == "Current Temperature" {
                         print("       ✅Thermostat Current temperature type is \(characteristic.characteristicType)")
                         let thermostat = Thermostat(thermostat: accessory)

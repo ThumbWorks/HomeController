@@ -285,7 +285,7 @@ public class Light: Accessory {
         switch lightState {
             
         case .on, .off:
-            updateLightCharacteristic?.writeValue(lightState) { (error) in
+            updateLightCharacteristic?.writeValue(lightState == .on) { (error) in
                 if let error = error {
                     print("error \(error)")
                     completion(false)
