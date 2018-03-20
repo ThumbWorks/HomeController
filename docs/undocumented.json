@@ -178,55 +178,55 @@
     {
       "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
       "line": 138,
-      "symbol": "Toggle.updateToggle(state:)",
+      "symbol": "Toggle.updateToggle(_:completion:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
-      "line": 162,
+      "line": 164,
       "symbol": "Thermostat",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
-      "line": 176,
+      "line": 178,
       "symbol": "Thermostat.setMode(to:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
-      "line": 191,
+      "line": 193,
       "symbol": "Thermostat.canSetThermostatMode()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
-      "line": 199,
+      "line": 201,
       "symbol": "Thermostat.canSetTargetTemperature()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
-      "line": 227,
+      "line": 229,
       "symbol": "Thermostat.temperature()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
-      "line": 256,
+      "line": 258,
       "symbol": "Light",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
-      "line": 281,
+      "line": 283,
       "symbol": "Light.update(lightState:completion:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
