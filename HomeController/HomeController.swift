@@ -24,7 +24,7 @@ extension HomeController: HMAccessoryDelegate {
                 closure(lockState)
             })
         }
-        else if characteristic == light?.characteristic {
+        else if characteristic == light?.updateLightCharacteristic {
             guard let closure = lightUpdate else {
                 print("no light closure defined")
                 return
@@ -56,7 +56,7 @@ public class HomeController: NSObject {
     // closures
     var temperatureUpdate: ((Float) -> Void)?
     var lockUpdate: ((LockState) -> Void)?
-    var lightUpdate: ((LightState) -> Void)?
+    var lightUpdate: ((ToggleState) -> Void)?
     
     override public init() {
         homeManager.delegate = homeManagerDelegate
@@ -111,7 +111,7 @@ public class HomeController: NSObject {
                     print("      characteristic \(characteristic.localizedDescription)")//\(characteristic.properties) ")
                     
                     if service.name == "Patio Light" && characteristic.localizedDescription == "Power State" {
-                        home.lights.append(Light(lightCharacteristic: characteristic))
+                        home.lights.append(Light(light: accessory))
                     }
                     if characteristic.localizedDescription == "Current Temperature" {
                         print("       ✅Thermostat Current temperature type is \(characteristic.characteristicType)")
@@ -149,48 +149,3 @@ public class HomeController: NSObject {
     }
     
 }
-
-extension HomeController {
-    func toggleLight(completion: @escaping (LightState) -> ()) {
-        home.lights.first?.isOn(lightCheckHandler: { (lightState) in
-            switch lightState {
-            case .On:
-                self.turnOffFirstLight()
-            case .Off:
-                self.turnOnFirstLight()
-            case .Unknown:
-                print("unknown light state")
-            }
-            completion(lightState)
-        })
-    }
-    func turnOnFirstLight() {
-        home.lights.first?.turnOnLight(lightHandler: { (success) in
-            if let lightUpdate = self.lightUpdate {
-                lightUpdate(.On)
-            } else {
-                print("Failed to turn on the light")
-            }
-        })
-    }
-    
-    func turnOffFirstLight() {
-        home.lights.first?.turnOffLight(lightHandler: { (success) in
-            if let lightUpdate = self.lightUpdate {
-                // If this fails, send back a YES because we want to keep the lights on
-                lightUpdate(.Off)
-            } else {
-                print("failed to turn off the light")
-            }
-        })
-    }
-    
-    func lockFirstDoor() {
-        home.locks.first?.lockDoor()
-    }
-    
-    func unlockFirstDoor() {
-        home.locks.first?.unlockDoor()
-    }
-}
-

@@ -17,16 +17,16 @@ public class Home {
 }
 
 enum LockState {
-    case Locked
-    case Unlocked
-    case Jammed
-    case Unknown
+    case locked
+    case unlocked
+    case jammed
+    case unknown
 }
 
-enum LightState {
-    case On
-    case Off
-    case Unknown
+public enum ToggleState {
+    case on
+    case off
+    case unknown
 }
 
 public class DoorLock: Accessory {
@@ -71,13 +71,13 @@ public class DoorLock: Accessory {
                 }
                 switch state {
                 case HMCharacteristicValueLockMechanismState.jammed.rawValue:
-                    lockCheckHandler(LockState.Jammed)
+                    lockCheckHandler(.jammed)
                 case HMCharacteristicValueLockMechanismState.secured.rawValue:
-                    lockCheckHandler(LockState.Locked)
+                    lockCheckHandler(.locked)
                 case HMCharacteristicValueLockMechanismState.unknown.rawValue:
-                    lockCheckHandler(LockState.Unknown)
+                    lockCheckHandler(.unknown)
                 case HMCharacteristicValueLockMechanismState.unsecured.rawValue:
-                    lockCheckHandler(LockState.Unlocked)
+                    lockCheckHandler(.unlocked)
                 default:
                     print("unknown state for the Lock characteristic")
                 }
@@ -127,8 +127,25 @@ public enum ThermostatMode: Int {
 }
 
 public class Toggle: Accessory {
+    lazy var updateToggleCharacteristic: HMCharacteristic? = {
+        return accessory.characteristic(with: "Power State")
+    }()
+    
     init(toggle: HMAccessory) {
         super.init(accessory: toggle)
+    }
+    
+    public func updateToggle(_ state: ToggleState, completion: @escaping (Bool) -> ()) {
+        let isOn = state == .on
+        updateToggleCharacteristic?.writeValue(isOn) { (error) in
+            if let error = error {
+                completion(false)
+                print("This didn't work \(error)")
+            } else {
+                completion(true)
+                print("Looks like setting the mode worked")
+            }
+        }
     }
 }
 
@@ -143,6 +160,7 @@ extension HMAccessory {
             }).first
     }
 }
+
 public class Thermostat: Accessory {
     lazy var currentTempCharacteristic: HMCharacteristic? = {
         return accessory.characteristic(with: "Current Temperature")
@@ -168,7 +186,6 @@ public class Thermostat: Accessory {
             } else {
                 print("Looks like setting the mode worked")
             }
-            
         }
         print("the mode setting characteristics should be 1 or 0 \(characteristic)")
     }
@@ -238,14 +255,20 @@ extension NSNumber {
     }
 }
 
-public class Light: NSObject {
-    let characteristic: HMCharacteristic
+public class Light: Accessory {
+    lazy var updateLightCharacteristic: HMCharacteristic? = {
+        return accessory.characteristic(with: "Power State")
+    }()
     
-    init(lightCharacteristic: HMCharacteristic) {
-        characteristic = lightCharacteristic
+    init(light: HMAccessory) {
+        super.init(accessory: light)
     }
     
     func enableNotifications() {
+        guard let characteristic = updateLightCharacteristic else {
+            print("no characteristic found for this light")
+            return
+        }
         if !characteristic.isNotificationEnabled {
             characteristic.enableNotification(true) { (error) in
                 if let error = error {
@@ -257,39 +280,38 @@ public class Light: NSObject {
         }
     }
     
-    func turnOnLight(lightHandler: @escaping (Bool) -> ()) {
-        characteristic.writeValue(1) { (error) in
-            if let error = error {
-                print("error \(error)")
-                lightHandler(false)
-            } else {
-                lightHandler(true)
+    public func update(lightState: ToggleState, completion: @escaping (Bool) -> ()) {
+        
+        switch lightState {
+            
+        case .on, .off:
+            updateLightCharacteristic?.writeValue(lightState) { (error) in
+                if let error = error {
+                    print("error \(error)")
+                    completion(false)
+                } else {
+                    completion(true)
+                }
             }
+            
+        case .unknown:
+            break
         }
-    }
-    func turnOffLight(lightHandler: @escaping (Bool) -> ()) {
-        characteristic.writeValue(0) { (error) in
-            if let error = error {
-                print("error \(error)")
-                lightHandler(false)
-            } else {
-                lightHandler(true)
-            }
-        }
+        
     }
     
-    func isOn(lightCheckHandler: @escaping (LightState) -> ())  {
-        characteristic.readValue(completionHandler: { (error) in
+    func isOn(lightCheckHandler: @escaping (ToggleState) -> ())  {
+        updateLightCharacteristic?.readValue(completionHandler: { (error) in
             if let error = error {
                 print("There was an error reading the light value \(error.localizedDescription)")
-                lightCheckHandler(.Unknown)
+                lightCheckHandler(.unknown)
             } else {
-                print("successfully read the light value \(String(describing: self.characteristic.value))")
-                if let isOn = self.characteristic.value as? Bool {
+                print("successfully read the light value \(String(describing: self.updateLightCharacteristic?.value))")
+                if let isOn = self.updateLightCharacteristic?.value as? Bool {
                     print("inside the light block \(isOn)")
-                    lightCheckHandler(isOn ? .On : .Off)
+                    lightCheckHandler(isOn ? .on : .off)
                 } else {
-                    lightCheckHandler(.Unknown)
+                    lightCheckHandler(.unknown)
                 }
             }
         })
