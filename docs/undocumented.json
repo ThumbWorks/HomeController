@@ -1,0 +1,236 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeController.swift",
+      "line": null,
+      "symbol": "HomeController",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeController.swift",
+      "line": 12,
+      "symbol": "HomeController.accessory(_:service:didUpdateValueFor:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeController.swift",
+      "line": 48,
+      "symbol": "HomeController",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeController.swift",
+      "line": 49,
+      "symbol": "HomeController.home",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeController.swift",
+      "line": 51,
+      "symbol": "HomeController.finishedInitializing",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeController.swift",
+      "line": 61,
+      "symbol": "HomeController.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeController.swift",
+      "line": 73,
+      "symbol": "HomeController.homekitSetup()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 12,
+      "symbol": "Home",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 13,
+      "symbol": "Home.thermostats",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 14,
+      "symbol": "Home.locks",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 15,
+      "symbol": "Home.lights",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 16,
+      "symbol": "Home.toggles",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 26,
+      "symbol": "ToggleState",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 27,
+      "symbol": "ToggleState.on",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 28,
+      "symbol": "ToggleState.off",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 29,
+      "symbol": "ToggleState.unknown",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 32,
+      "symbol": "DoorLock",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 110,
+      "symbol": "Accessory",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 117,
+      "symbol": "Accessory.name()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 122,
+      "symbol": "ThermostatMode",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 123,
+      "symbol": "ThermostatMode.off",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 124,
+      "symbol": "ThermostatMode.heat",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 125,
+      "symbol": "ThermostatMode.cool",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 126,
+      "symbol": "ThermostatMode.fan",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 129,
+      "symbol": "Toggle",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 138,
+      "symbol": "Toggle.updateToggle(state:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 162,
+      "symbol": "Thermostat",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 176,
+      "symbol": "Thermostat.setMode(to:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 191,
+      "symbol": "Thermostat.canSetThermostatMode()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 199,
+      "symbol": "Thermostat.canSetTargetTemperature()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 227,
+      "symbol": "Thermostat.temperature()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 256,
+      "symbol": "Light",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/roderic/dev/Thumbworks/HomeController/HomeController/HomeObjects.swift",
+      "line": 281,
+      "symbol": "Light.update(lightState:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/roderic/dev/Thumbworks/HomeController"
+}
