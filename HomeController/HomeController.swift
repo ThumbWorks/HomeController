@@ -82,20 +82,24 @@ public class HomeController: NSObject {
             return
         }
         
-        print("the accessories are \(homeObject.accessories)")
+        
+        print("the accessories are")
+        _ = homeObject.accessories.map({print("\($0)")})
         for accessory in homeObject.accessories {
             print("\nIterate through services for accessory: \(accessory.name) \(accessory.category.categoryType). Model: \(accessory.model) manufacturer \(accessory.manufacturer)")
             for service in accessory.services {
                 // blindly set all accessory delegates to self, we can filter when we get the notifications
                 accessory.delegate = self
                 
-                print("   service name: \(service.name) type: \(service.serviceType) uniqueID: \(service.uniqueIdentifier)")
+                print("   service name: \(service.name) \(service.localizedDescription)")//" type: \(service.serviceType) uniqueID: \(service.uniqueIdentifier) ")
                 
                 if service.serviceType == HMServiceTypeSwitch {
                     home.toggles.append(Toggle(toggle: accessory))
                 }
                 if service.serviceType == HMServiceTypeLightbulb {
-                    home.lights.append(Light(light: accessory))
+                    let light = Light(light: accessory)
+                    light.enableNotifications()
+                    home.lights.append(light)
                 }
                 
                 print("\n  this service <<<\(service.name)>>> has characteristics")

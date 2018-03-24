@@ -16,7 +16,7 @@ public class Home {
     public var toggles = [Toggle]()
 }
 
-enum LockState {
+public enum LockState {
     case locked
     case unlocked
     case jammed
@@ -43,7 +43,16 @@ public class DoorLock: Accessory {
         readLockCharacteristic.enableNotification(true) { (error) in
             if let error = error {
                 print("FAIL: There was an error with enabling notifications for read lock changes \(error.localizedDescription)")
+                self.valueUpdate?(UpdateResult.error(error))
             } else {
+                self.readLockCharacteristic.readValue(completionHandler: { (error) in
+                    print("we got self.readLockCharacteristic.value \(self.readLockCharacteristic.value)")
+                    if let error = error {
+                        self.valueUpdate?(UpdateResult.error(error))
+                    } else if let number = self.readLockCharacteristic.value as? NSNumber {
+                        self.valueUpdate?(UpdateResult.value(number))
+                    }
+                })
                 print("SUCCESS: read lock notification set up properly")
             }
         }
@@ -86,22 +95,22 @@ public class DoorLock: Accessory {
         })
     }
     
-    func unlockDoor() {
-        setLockCharacteristic.writeValue(0, completionHandler: { (error) in
+    public func update(state: LockState) {
+        var newValue: NSNumber?
+        switch state {
+        case .locked:
+            newValue = 1
+        case .unlocked:
+            newValue = 0
+        case .jammed, .unknown:
+            break
+        }
+        guard let value = newValue else {return}
+        setLockCharacteristic.writeValue(value, completionHandler: { (error) in
             if let error = error {
-                print("error locking the door \(error)")
+                print("error setting door lock to \(state). Error: \(error)")
             } else {
-                print("The door is now unlocked")
-            }
-        })
-    }
-    
-    func lockDoor() {
-        setLockCharacteristic.writeValue(1, completionHandler: { (error) in
-            if let error = error {
-                print("error unlocking door \(error)")
-            } else {
-                print("The door is now locked")
+                print("The door is now in the state: \(state)")
             }
         })
     }
@@ -109,13 +118,32 @@ public class DoorLock: Accessory {
 
 public class Accessory: NSObject {
     let accessory: HMAccessory
-
+    
+    var value: NSNumber = 0
     init(accessory: HMAccessory) {
         self.accessory = accessory
     }
+
+    public var valueUpdate: ((UpdateResult) -> ())?
+
+    public var nameListener: ((String) -> ())?
+    lazy var nameCharacteristic: HMCharacteristic? = {
+        let characteristic = accessory.characteristic(with: "Name")
+        characteristic?.readValue(completionHandler: { (error) in
+            if let error = error {
+                print("error fetching name \(error)")
+            } else {
+                print("we got the name \(characteristic?.value)")
+            }
+        })
+        return characteristic
+    }()
     
     public func name() -> String {
-        return accessory.name
+        guard let newName = self.nameCharacteristic?.service?.name else {
+            return "it isn't the service"
+        }
+        return newName
     }
 }
 
@@ -133,7 +161,17 @@ public class Toggle: Accessory {
     
     init(toggle: HMAccessory) {
         super.init(accessory: toggle)
+        
+        updateToggleCharacteristic?.readValue { (error) in
+            if let error = error {
+                self.valueUpdate?(UpdateResult.error(error))
+            }
+            else if let value = self.updateToggleCharacteristic?.value as? NSNumber {
+                self.valueUpdate?(UpdateResult.value(value))
+            }
+        }
     }
+    
     
     public func updateToggle(_ state: ToggleState, completion: @escaping (Bool) -> ()) {
         let isOn = state == .on
@@ -143,7 +181,7 @@ public class Toggle: Accessory {
                 print("This didn't work \(error)")
             } else {
                 completion(true)
-                print("Looks like setting the mode worked")
+                print("Looks like setting the toggle to \(self.updateToggleCharacteristic?.value!) worked")
             }
         }
     }
@@ -184,7 +222,7 @@ public class Thermostat: Accessory {
             if let error = error {
                 print("This didn't work \(error)")
             } else {
-                print("Looks like setting the mode worked")
+                print("Looks like setting the mode for the thermostat worked")
             }
         }
         print("the mode setting characteristics should be 1 or 0 \(characteristic)")
@@ -205,7 +243,7 @@ public class Thermostat: Accessory {
             }).count > 0
             }.count > 0
     }
-
+    
     func enableNotifications() {
         print("THERMOSTAT attempt to enable notificaitons on this")
         guard let characteristic = currentTempCharacteristic else {
@@ -255,19 +293,35 @@ extension NSNumber {
     }
 }
 
+public enum UpdateResult {
+    case value(NSNumber)
+    case error(Error)
+}
+
 public class Light: Accessory {
+    
     lazy var updateLightCharacteristic: HMCharacteristic? = {
         return accessory.characteristic(with: "Power State")
     }()
     
     init(light: HMAccessory) {
         super.init(accessory: light)
+        enableNotifications()
     }
     
     func enableNotifications() {
+        
         guard let characteristic = updateLightCharacteristic else {
             print("no characteristic found for this light")
             return
+        }
+        characteristic.readValue { (error) in
+            if let error = error {
+                self.valueUpdate?(UpdateResult.error(error))
+            }
+            else if let value = characteristic.value as? NSNumber {
+                self.valueUpdate?(UpdateResult.value(value))
+            }
         }
         if !characteristic.isNotificationEnabled {
             characteristic.enableNotification(true) { (error) in
@@ -277,6 +331,8 @@ public class Light: Accessory {
                     print("SUCCESS: current light notification set up properly")
                 }
             }
+        } else {
+            print("notifications are not available for this light")
         }
     }
     

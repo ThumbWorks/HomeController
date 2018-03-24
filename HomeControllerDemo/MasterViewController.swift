@@ -9,6 +9,32 @@
 import UIKit
 import HomeController
 
+class ToggleCell: UITableViewCell {
+    static let identifer = "SwitchCell"
+    @IBOutlet weak var toggleSwitch: UISwitch!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var title: UILabel!
+}
+
+extension ToggleCell {
+    func waitForUpdate() {
+        loadingIndicator.isHidden = false
+        toggleSwitch.isHidden = true
+    }
+    func update(value: UpdateResult) {
+        loadingIndicator.isHidden = true
+        
+        switch value {
+        case .value(let isOn):
+            toggleSwitch.isOn = isOn.boolValue
+            toggleSwitch.isHidden = false
+        case .error(let error):
+            print("error \(error)")
+        }
+        print("This new value is \(value)")
+    }
+}
+
 class MasterViewController: UIViewController {
 
     var detailViewController: DetailViewController? = nil
@@ -118,15 +144,26 @@ extension MasterViewController: UITableViewDataSource {
         }
     }
     
-    func update(cell: UITableViewCell, with accessory: Accessory) {
-        cell.textLabel?.text = accessory.description
-        cell.accessoryView = cellSwitch()
+    func update(cell: ToggleCell, with accessory: Accessory) {
+        
+        accessory.nameListener = { newName in
+            cell.title.text = newName
+        }
+        cell.title.text = accessory.name()
+    }
+    
+    func defaultCell(for indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.accessoryView = nil
+        return cell
+    }
+    
+    func switchCell(for indexPath: IndexPath) -> ToggleCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ToggleCell.identifer, for: indexPath) as! ToggleCell
+        return cell
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.accessoryView = nil
-        cell.detailTextLabel?.text = ""
         let home = homeController.home
 
         switch indexPath.section {
@@ -135,29 +172,49 @@ extension MasterViewController: UITableViewDataSource {
             let modeText = "mode " + therm.canSetThermostatMode().description
             let tempText = "temp " + therm.canSetTargetTemperature().description
             
+            let cell = defaultCell(for: indexPath)
             cell.detailTextLabel!.text = modeText + " / " + tempText
             cell.textLabel?.text = therm.name()
+            return cell
         case 1:
-            update(cell: cell, with: home.lights[indexPath.row])
+            
+            let cell = switchCell(for: indexPath)
+            let light = home.lights[indexPath.row]
+            update(cell: cell, with: light)
+            light.valueUpdate = { (value) in
+                cell.update(value: value)
+            }
+            return cell
             
         case 2:
-            update(cell: cell, with: home.locks[indexPath.row])
+            let cell = switchCell(for: indexPath)
+            let lock = home.locks[indexPath.row]
+            lock.valueUpdate = { (value) in
+                cell.update(value: value)
+            }
+            update(cell: cell, with: lock)
+            return cell
             
         case 3:
+            let cell = switchCell(for: indexPath)
             let toggle = home.toggles[indexPath.row]
-            cell.textLabel?.text = toggle.name()
-            cell.accessoryView = cellSwitch()
+            toggle.valueUpdate = { (value) in
+                cell.update(value: value)
+            }
+            update(cell: cell, with: toggle)
+            return cell
             
         default:
+            let cell = defaultCell(for: indexPath)
             cell.textLabel?.text = "unknown"
+            return cell
         }
         
-        return cell
     }
-    
-    @objc private func switchChanged(sender: UISwitch) {
+    @IBAction func switchChanged(sender: UISwitch) {
+        
         print("sender changed \(sender.isOn)")
-        if let cell = sender.superview as? UITableViewCell {
+        if let cell = sender.superview?.superview as? ToggleCell {
             if let indexPath = tableView.indexPath(for: cell) {
                 switch indexPath.section {
                 case 0:
@@ -176,16 +233,21 @@ extension MasterViewController: UITableViewDataSource {
                     
                 case 2:
                     let lock = homeController.home.locks[indexPath.row]
+                    lock.update(state: sender.isOn ? .unlocked : .locked)
                     print(lock, " turn it \(sender.isOn)")
 
                 case 3:
                     let toggle = homeController.home.toggles[indexPath.row]
                     print(toggle, " turn it \(sender.isOn)")
                     let state: ToggleState = sender.isOn ? .on : .off
-                    
+                    cell.waitForUpdate()
                     toggle.updateToggle(state) { (success) in
                         if !success {
+                            print("update the toggle. It failed")
                             sender.isOn = state != .on
+                        } else {
+                            print("update the toggle. it worked")
+                            cell.update(value: UpdateResult.value(sender.isOn as NSNumber))
                         }
                     }
                 default:
@@ -193,11 +255,5 @@ extension MasterViewController: UITableViewDataSource {
                 }
             }
         }
-    }
-    
-    private func cellSwitch() -> UISwitch {
-        let switchView = UISwitch()
-        switchView.addTarget(self, action: #selector(switchChanged(sender:)), for: .valueChanged)
-        return switchView
     }
 }
